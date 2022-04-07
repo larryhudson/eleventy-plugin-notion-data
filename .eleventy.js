@@ -1,7 +1,7 @@
-const { MyPlugin } = require("./index");
+const { NotionPlugin } = require("./index");
 
 module.exports = function (eleventyConfig) {
-  eleventyConfig.addPlugin(MyPlugin);
+  eleventyConfig.addPlugin(NotionPlugin);
 
   return {
     dir: {

@@ -1,14 +1,16 @@
 {
-  "name": "scaffold-eleventy-plugin",
+  "name": "eleventy-plugin-notion-data",
   "version": "1.0.0",
-  "description": "Template for Eleventy plugin development",
+  "description": "Use Notion data in your Eleventy project",
   "main": "index.js",
   "scripts": {
-    "test": "npx @11ty/eleventy"
+    "test": "npx @11ty/eleventy",
+    "start": "npx @11ty/eleventy --serve --watch"
   },
   "keywords": [
     "eleventy",
-    "eleventy-plugin"
+    "eleventy-plugin",
+    "notion"
   ],
   "license": "MIT",
   "publishConfig": {
@@ -16,9 +18,9 @@
     "registry": "https://registry.npmjs.org/"
   },
   "bugs": {
-    "url": "https://github.com/larryhudson/<REPLACE THIS!>/issues"
+    "url": "https://github.com/larryhudson/eleventy-plugin-notion-data/issues"
   },
-  "homepage": "https://github.com/larryhudson/<REPLACE THIS!>#readme",
+  "homepage": "https://github.com/larryhudson/eleventy-plugin-notion-data#readme",
   "author": {
     "name": "Larry Hudson",
     "email": "larryhudson@hey.com",
@@ -26,10 +28,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/larryhudson/<REPLACE THIS!>.git"
+    "url": "git+https://github.com/larryhudson/eleventy-plugin-notion-data.git"
   },
   "dependencies": {
     "@11ty/eleventy": "^1.0.0",
+    "@11ty/eleventy-fetch": "^3.0.0",
+    "@notionhq/client": "^1.0.4",
+    "dotenv": "^16.0.0",
     "lodash.merge": "^4.6.2"
   }
 }
