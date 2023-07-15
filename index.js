@@ -2,7 +2,10 @@ require("dotenv").config();
 const lodashMerge = require("lodash.merge");
 const { Client } = require("@notionhq/client");
 const { fetchQuery } = require("./utils/fetch-query");
-const { notionBlocksToHtml } = require("./utils/blocks-to-html");
+const {
+  notionBlocksToHtml,
+  renderPlainText,
+} = require("./utils/blocks-to-html");
 
 const NotionPlugin = (eleventyConfig, suppliedOptions) => {
   const defaultOptions = {
@@ -11,6 +14,10 @@ const NotionPlugin = (eleventyConfig, suppliedOptions) => {
     queries: {
       blogPages: {
         fetchBlocks: true,
+        getPermalinkFromData: (blockData) => {
+          const slug = renderPlainText(blockData.properties["Slug"].rich_text);
+          return `/blog/${slug}/`;
+        },
         queryFunction: async (notion) =>
           notion.databases.query({
             database_id: process.env.NOTION_BLOG_DATABASE_ID,
@@ -38,6 +45,7 @@ const NotionPlugin = (eleventyConfig, suppliedOptions) => {
             queryPromise: queryOptions.queryFunction(notionClient),
             notionClient,
             cacheTime: options.cacheTime,
+            getPermalinkFromData: queryOptions.getPermalinkFromData,
           }),
         })
       )

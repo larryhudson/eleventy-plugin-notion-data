@@ -3,10 +3,10 @@ pagination:
   data: notionData.blogPages.results
   size: 1
   alias: notionPage
+permalink: "{{notionPage.permalink}}"
 ---
 
-<pre>
+{# <pre>
 {{notionPage | dump(2) }}
-</pre>
-
-{{notionPage.children | blocksToHtml | safe}}
+</pre> #}
+{{notionPage.children | blocksToHtml(notionData.blogPages.permalinkById) | safe}}

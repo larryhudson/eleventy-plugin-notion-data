@@ -28,7 +28,7 @@ async function fetchBlockWithChildren(blockId, notionClient) {
   }
 }
 
-async function fetchPage(pageId, notionClient) {
+async function fetchPage(pageId, notionClient, getPermalinkFromData) {
   const pageInfo = notionClient.pages.retrieve({
     page_id: pageId,
   });
@@ -40,7 +40,9 @@ async function fetchPage(pageId, notionClient) {
 
     const renderedProperties = renderProperties(info.properties);
 
-    const pageData = { ...info, children, renderedProperties };
+    const permalink = getPermalinkFromData(info);
+
+    const pageData = { ...info, children, renderedProperties, permalink };
 
     return pageData;
   } catch (error) {
@@ -55,6 +57,7 @@ const fetchQuery = async ({
   notionClient,
   fetchBlocks,
   cacheTime,
+  getPermalinkFromData,
 }) => {
   let cachedQuery = new AssetCache(`notion_query_${queryName}`);
 
@@ -64,12 +67,24 @@ const fetchQuery = async ({
 
   let queryValue = await queryPromise;
 
+  let permalinkById = {};
+
+  queryValue.results.forEach((page) => {
+    permalinkById[page.id] = getPermalinkFromData(page);
+  });
+
   if (fetchBlocks) {
     const blocks = await Promise.all(
-      queryValue.results.map((block) => fetchPage(block.id, notionClient))
+      queryValue.results.map((block) =>
+        fetchPage(block.id, notionClient, getPermalinkFromData)
+      )
     );
 
     queryValue.results = blocks;
+
+    queryValue.permalinkById = permalinkById;
+
+    console.log(JSON.stringify(queryValue, null, 2));
   }
 
   cachedQuery.save(queryValue, "json");
